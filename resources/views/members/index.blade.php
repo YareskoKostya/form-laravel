@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.app')
 
 @section('content')
 
@@ -7,10 +7,15 @@
     </div>
     <div class="container contact-form" align="center">
         <h2 class="pb-4">To participate in the conference, please fill out the form:</h2>
-        @include('errors')
         <p class="statusMsg"></p>
         <div class="tab">
             <form method="post" id="form1">
+                @csrf
+                @if($errors->has('title'))
+                    <div class="mt-1 text-danger">
+                        {{ $errors->first('title') }}
+                    </div>
+                @endif
                 <p><input class="form-control" type="text" name="firstname" pattern="[A-Za-z]{1,32}" placeholder="first name*" required></p>
                 <p><input class="form-control" type="text" name="lastname" pattern="[A-Za-z]{1,32}" placeholder="last name*" required></p>
                 <p><input class="form-control" name="birthdate" id="datepicker" minlength="10" placeholder="birthdate*" required></p>
@@ -24,6 +29,12 @@
 
         <div class="tab">
             <form enctype="multipart/form-data" method="post" id="form2">
+                @csrf
+                @if($errors->has('title'))
+                    <div class="mt-1 text-danger">
+                        {{ $errors->first('title') }}
+                    </div>
+                @endif
                 <p><input class="form-control" type="text" name="company" placeholder="company*" required></p>
                 <p><input class="form-control" type="text" name="position" placeholder="position*" required></p>
                 <p><textarea class="form-control" rows="8" name="about" placeholder="about me*" required></textarea></p>
@@ -39,9 +50,9 @@
 
         <div class="tab">
             <h4>Share the link on social networks</h4>
-            <input type="button" class="btn btn-lg btn-fb" onclick="location.href='http://facebook.com/share?url=<?=$GLOBALS['url']?>'" value="Facebook"/>
-            <input type="button" class="btn btn-lg btn-tw" onclick="location.href='http://twitter.com/share?text=<?=$GLOBALS['message']?>&url=<?=$GLOBALS['url']?>&hashtags=conference,AngularJS';" value="Twitter"/>
-            <input type="button" class="btn btn-lg btn-gp" onclick="location.href='http://plus.google.com/share?url=<?=$GLOBALS['url']?>';" value="Google+"/>
+            <input type="button" class="btn btn-lg btn-fb" onclick="location.href='http://facebook.com/share?url={{ config('app.url') }}'" value="Facebook"/>
+            <input type="button" class="btn btn-lg btn-tw" onclick="location.href='http://twitter.com/share?text={{ config('app.message') }}&url={{ config('app.url') }}&hashtags=conference,AngularJS';" value="Twitter"/>
+            <input type="button" class="btn btn-lg btn-gp" onclick="location.href='http://plus.google.com/share?url=<{{ config('app.url') }}';" value="Google+"/>
         </div>
 
         <!-- Circles which indicates the steps of the form: -->
@@ -51,7 +62,7 @@
             <span class="step"></span>
         </div>
 
-        <h2 class="mt-4"><a href="/list">All members (<?=$data->fetchColumn()?>)</a></h2>
+        <h2 class="mt-4"><a href="{{ route('list') }}">All members ({{ $members }})</a></h2>
 
     </div>
     <script src="{{ asset('js/script.js') }}"></script>

@@ -11,10 +11,16 @@
 |
 */
 
-Route::get('/', 'MembersController@index')->name('index');
+Route::get('/', function () {
+    return view('welcome');
+})->name('index');
 
 Route::post('store/1', 'MembersController@store1')->name('store1');
 
 Route::post('store/2', 'MembersController@store2')->name('store2');
 
-Route::get('list', 'MembersController@getList')->name('getList');
+Route::get('list', 'MembersController@getList')->name('list');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
